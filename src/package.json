@@ -1,0 +1,10 @@
+{
+	"name": "ThinkpadTennisNW",
+	"main": "index.html",
+	"window": {
+		"icon": "images/icon.png",
+		"toolbar": false,
+	 	"frame": true
+	}
+	
+}
