@@ -20,5 +20,5 @@ mv src/ThinkpadTennisNW.zip bin/ThinkpadTennisNW.nw
 echo "Building Linux package"
 cd bin
 cp -r  ./../dependencies/node-webkit-v0.9.2-linux-x64 ThinkpadTennisNW
-cp finals_app.nw ./ThinkpadTennisNW/package.nw
+cp ThinkpadTennisNW.nw ./ThinkpadTennisNW/package.nw
 zip -r ThinkpadTennisNW.zip ThinkpadTennisNW
