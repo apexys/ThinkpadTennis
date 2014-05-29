@@ -4,16 +4,74 @@
 	<link rel="stylesheet" href="style.css">
 	<script type="text/javascript" src="d3.js"></script>
 	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="jszip.js"></script>
-	<script type="text/javascript" src="pako.js"></script>
-	
-	<script>
-	
+	<script type="text/javascript">
+		fs = require('fs');
+		
+		sensorX = 0;
+		sensorY = 0;
+		
+		ballPosX = 0;
+		ballPosY = 0;
+		
+		ballVectorX = 0;
+		ballVectorY = 0;
 	</script>
 	
 </head>
 <body>
-	<svg>
-	</svg>
+	<div id="debug">DEBUG</div>
+	
+	<script type="text/javascript">
+		
+	function showDialog(message, action){
+		var id = "dialog" + Math.random();
+		id = id.replace(".","");
+		id = id.replace("-","");
+		var dialogdiv = d3.select('body').append('div');
+		dialogdiv.classed('dialog', true);
+		dialogdiv.attr('id', id);
+		dialogdiv.append('p').text(message);
+		dialogdiv.append('br');
+		var btnOK = dialogdiv.append('button');
+		btnOK.text('OK');
+		btnOK.attr('onclick', "d3.select(#" + id + ").remove()");
+		btnOK.on('click', action);
+		var btnCancel = dialogdiv.append('button');
+		btnCancel.text('Cancel');
+		btnCancel.on('onclick', "d3.select(#" + id + ").remove();");
+	}
+	showDialog("TEST", function(){alert("test");});
+		
+	function updateSensor(){
+		fs.readFile('/sys/devices/platform/hdaps/position', function (err, data) {
+		if (err) throw err;
+			var parts = String(data).replace("(","").replace(")", "").split(",");
+			sensorX = parts[0];
+			sensorY = parts[1];
+			setTimeout(updateSensor, 100);
+		});
+	}
+	
+	function updateServer(){
+		
+	}	
+		
+	function draw(){
+		updateDebug();
+		//Finally
+		requestAnimationFrame(draw);
+	}	
+		
+		
+	function updateDebug(){
+		d3.select('#debug').text(sensorX + "," + sensorY);
+	}
+	
+	function start(){
+		requestAnimationFrame(draw);
+		setTimeout(updateSensor, 100);
+	}
+	start();
+	</script>
 </body>
 </html>

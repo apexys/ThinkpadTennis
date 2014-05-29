@@ -1,10 +1,24 @@
 body{
+	color: #0f0;
 	background-color: black;
+	font-weight: bold;
 	font-family: monospace;
 }
 
 .dialog{
-
+	/* Style */
+	border-radius: 10px;
+	background-color: #333;
+	border: 3px solid white;
+	
+	/* Position */
+	position:absolute;
+	left: 50%;
+	top: 50%;
+	width: 200px;
+	height: 100px;
+	margin-top:  -50px;
+	margin-left: -100px;
 }
 
 .paddle{
@@ -16,7 +30,7 @@ body{
 }
 
 .button{
-
+	
 }
 
 .button:active{
