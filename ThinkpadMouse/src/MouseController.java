@@ -10,7 +10,7 @@ public class MouseController {
 	
 	Robot Rb;
 	
-	int delayMS = 32;
+	public int delayMS = 32;
 	
 	Dimension screenSize;
 	
@@ -21,7 +21,7 @@ public class MouseController {
 	
 	FloatingPoint history;
 	
-	float smoothSpeed = 0.15f;
+	public float smoothSpeed = 0.15f;
 	
 	public MouseController() throws AWTException, InterruptedException{
 		Rb = new Robot();
@@ -30,6 +30,10 @@ public class MouseController {
 		
 		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
+		
+	}
+
+	public void run()  throws AWTException, InterruptedException{
 		lastPosition = readGyro();
 		
 		screenMiddle = new FloatingPoint(((float)screenSize.width) / 2f, ((float)screenSize.height) / 2f);
@@ -57,7 +61,7 @@ public class MouseController {
 		while(true){
 			recalculate();
 			if(!Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)){
-				System.out.println("Enable Capslock to start mouse control");
+				System.out.println("Enable CAPSLOCK to start mouse control");
 				while(!Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)){
 					Thread.sleep(250);
 				}
@@ -176,7 +180,35 @@ public class MouseController {
 	
 	public static void main(String[] args) {
 		try{
+			System.out.println("ThinkpadMouse written by Valentin Buck at KIF42 in 2014");
 			MouseController mc = new MouseController();
+			for(String arg : args){
+				if(arg.startsWith("-SampleRate=")){
+					try{
+						int sampleRate = Integer.parseInt(arg.substring("-SampleRate=".length()));
+						mc.delayMS = 1000 / sampleRate;
+						System.out.println("Set sample rate to " + String.valueOf(sampleRate));
+					}catch(Exception ex){
+						;
+					}
+				}
+				if(arg.startsWith("-Smoothing=")){
+					try{
+						float smoothing = Float.parseFloat(arg.substring("-Smoothing=".length()));
+						mc.smoothSpeed = 1f / smoothing;
+						System.out.println("Set sample rate to " + String.valueOf(smoothing));
+					}catch(Exception ex){
+						;
+					}
+				}
+				if(arg.startsWith("help")){
+					System.out.println("Arguments:\n"
+							+ "help : Print help text\n"
+							+ "-SampleRate=[Integer] : Sets sensor sampling rate to [Integer] reads per second (or at least attempts to)\n"
+							+ "-Smoothing=[Float] : Sets the smooting factor to [Float]. Higher smoothing factor means less jitter but also slower speed");
+				}
+			}
+			mc.run();
 		}catch(Exception ex){
 			;
 		}
